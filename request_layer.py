@@ -17,8 +17,8 @@ def calculate():
     elif request.content_length is not None and request.content_length > 1024: # let's also limit the size of permitted payloads to 1 KB
         abort(413)
     else: # if JSON, continue
-        recieved_data = request.get_json() # pull the data out of the POST request 
-        converted_data = recieved_data['data_array'] # format of the POST comes in as a dict, so just select the array
+        received_data = request.get_json() # pull the data out of the POST request 
+        converted_data = received_data['data_array'] # format of the POST comes in as a dict, so just select the array
 
         # set up psignifit with some standard options
         options = dict();
