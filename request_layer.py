@@ -10,8 +10,8 @@ CORS(app)
 #def output(): # serve the demo script
 #    return render_template('demo.html')
 
-@app.route("/psignifit", methods=['POST'])
-def calculate():
+@app.route("/coherence_thresholding", methods=['POST'])
+def calculate_coh():
     if request.get_json() is None: # abort if not JSON (sanitise input)
         abort(400)
     elif request.content_length is not None and request.content_length > 1024: # let's also limit the size of permitted payloads to 1 KB
@@ -33,6 +33,26 @@ def calculate():
         thresholds = [result_upper['Fit'][0],result_lower['Fit'][0]]
 
         return jsonify(thresholds)
+
+@app.route("/rule_thresholding", methods=['POST'])
+def calculate_rule():
+    if request.get_json() is None: # abort if not JSON (sanitise input)
+        abort(400)
+    elif request.content_length is not None and request.content_length > 1024: # let's also limit the size of permitted payloads to 1 KB
+        abort(413)
+    else: # if JSON, continue
+        received_data = request.get_json() # pull the data out of the POST request 
+        converted_data = received_data['data_array'] # format of the POST comes in as a dict, so just select the array
+
+        # set up psignifit with some standard options
+        options = dict();
+        options['sigmoidName'] = 'norm';
+        options['expType']     = '2AFC';
+
+        options['threshPC']    = 0.7;
+        result = ps.psignifit(converted_data,options);
+
+        return jsonify(result['Fit'][0])
 
 if __name__ == "__main__":
 	app.run()
