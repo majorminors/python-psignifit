@@ -6,7 +6,7 @@
 		<script>
 			
 			let payload = {
-				faked_data: [
+				data_array: [
 					[0.10,   45.0000,   90.0000],
 					[0.15,   50.0000,   90.0000],
 					[0.20,   44.0000,   90.0000],
@@ -20,11 +20,11 @@
 					[0.70,   88.0000,   90.0000],
 					[0.80,   90.0000,   90.0000],
 					[0.90,   90.0000,   90.0000]
-				]
+				],
 			};
 
 			axios({
-				url: '/psignifit',
+				url: '/coherence_thresholding',
 				method: 'post',
 				data: payload
 			})

@@ -14,6 +14,9 @@ First install Flask:
 Then install the CORS plugin:
 `pip3 install -U flask-cors`
 
+Then the python json schema implemention
+`pip3 install jsonschema`
+
 Ensure that the following files are in the root directory of the psignifit-python folder:
 - request_layer.py
 - request_layer/

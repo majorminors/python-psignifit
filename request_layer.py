@@ -1,14 +1,15 @@
 from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
+from jsonschema import validate
 import numpy as np
 import psignifit as ps
 
 app = Flask(__name__, root_path='request_layer/') # make Flask look in the 'request_layer/' dir for templates etc, instead of in the root dir
 CORS(app)
 
-#@app.route('/')
-#def output(): # serve the demo script
-#    return render_template('demo.html')
+@app.route('/')
+def output(): # serve the demo script
+    return render_template('demo.html')
 
 @app.route("/coherence_thresholding", methods=['POST'])
 def calculate_coh():
@@ -17,7 +18,26 @@ def calculate_coh():
     elif request.content_length is not None and request.content_length > 1024: # let's also limit the size of permitted payloads to 1 KB
         abort(413)
     else: # if JSON, continue
-        received_data = request.get_json() # pull the data out of the POST request 
+        received_data = request.get_json() # pull the data out of the POST request
+
+        # now use jsonschema to validate
+        validate(received_data, {"maxItems": 1}) # check only one item
+        valid_schema_object = { # check that the object is correctly formatted
+                "type": "object",
+                "properties": {
+                    "data_array": {"type" : "array"},
+                },
+                "required": ["data_array"],
+                "additionalProperties": False
+        }
+        validate(received_data,valid_schema_object)
+        valid_scheme_array = {
+            "type": "array",
+            "items": {
+                "type": "number"    
+            }
+        }
+
         converted_data = received_data['data_array'] # format of the POST comes in as a dict, so just select the array
 
         # set up psignifit with some standard options
