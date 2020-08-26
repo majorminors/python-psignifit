@@ -11,7 +11,7 @@ CORS(app)
 #def output(): # serve the demo script
 #    return render_template('demo.html')
 
-@app.route("/coherence_thresholding", methods=['POST'])
+@app.route("/pyapps/util/cthresh", methods=['POST'])
 def calculate_coh():
     if request.get_json() is None: # abort if not JSON (sanitise input)
         abort(400)
@@ -56,7 +56,7 @@ def calculate_coh():
 
         return jsonify(thresholds)
 
-@app.route("/rule_thresholding", methods=['POST'])
+@app.route("/pyapps/util/rthresh", methods=['POST'])
 def calculate_rule():
     if request.get_json() is None: # abort if not JSON (sanitise input)
         abort(400)
