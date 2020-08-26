@@ -7,9 +7,9 @@ import psignifit as ps
 app = Flask(__name__, root_path='request_layer/') # make Flask look in the 'request_layer/' dir for templates etc, instead of in the root dir
 CORS(app)
 
-@app.route('/')
-def output(): # serve the demo script
-    return render_template('demo.html')
+#@app.route('/')
+#def output(): # serve the demo script
+#    return render_template('demo.html')
 
 @app.route("/coherence_thresholding", methods=['POST'])
 def calculate_coh():
@@ -23,20 +23,22 @@ def calculate_coh():
         # now use jsonschema to validate
         validate(received_data, {"maxItems": 1}) # check only one item
         valid_schema_object = { # check that the object is correctly formatted
-                "type": "object",
+                "type": "object", # its an object
                 "properties": {
-                    "data_array": {"type" : "array"},
+                    "data_array": { # called 'data_array'
+                        "type" : "array", # that is an array
+                        "items": {
+                            "type": "array", # consisting of arrays
+                            "items": {
+                                "type": "number" # which have only numbers inside
+                            }
+                        }
+                    },
                 },
-                "required": ["data_array"],
-                "additionalProperties": False
+                "required": ["data_array"], # 'data_array' is required
+                "additionalProperties": False # and nothing else exists in the object
         }
         validate(received_data,valid_schema_object)
-        valid_scheme_array = {
-            "type": "array",
-            "items": {
-                "type": "number"    
-            }
-        }
 
         converted_data = received_data['data_array'] # format of the POST comes in as a dict, so just select the array
 
@@ -62,6 +64,27 @@ def calculate_rule():
         abort(413)
     else: # if JSON, continue
         received_data = request.get_json() # pull the data out of the POST request 
+
+        # now use jsonschema to validate
+        validate(received_data, {"maxItems": 1}) # check only one item
+        valid_schema_object = { # check that the object is correctly formatted
+                "type": "object", # its an object
+                "properties": {
+                    "data_array": { # called 'data_array'
+                        "type" : "array", # that is an array
+                        "items": {
+                            "type": "array", # consisting of arrays
+                            "items": {
+                                "type": "number" # which have only numbers inside
+                            }
+                        }
+                    },
+                },
+                "required": ["data_array"], # 'data_array' is required
+                "additionalProperties": False # and nothing else exists in the object
+        }
+        validate(received_data,valid_schema_object)
+
         converted_data = received_data['data_array'] # format of the POST comes in as a dict, so just select the array
 
         # set up psignifit with some standard options
