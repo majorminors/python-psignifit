@@ -1,15 +1,23 @@
 from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
+from flask_basicauth import BasicAuth
 from jsonschema import validate
 import numpy as np
 import psignifit as ps
 
 app = Flask(__name__, root_path='request_layer/') # make Flask look in the 'request_layer/' dir for templates etc, instead of in the root dir
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:9000"}}) # enable CORS
 
-#@app.route('/')
-#def output(): # serve the demo script
-#    return render_template('demo.html')
+# configure authentication
+#app.config['BASIC_AUTH_FORCE'] = True # force authentication on all routes
+#app.config['BASIC_AUTH_USERNAME'] = 'test'
+#app.config['BASIC_AUTH_PASSWORD'] = 'test'
+#BasicAuth(app)
+
+# uncomment this to enable the demo
+@app.route('/')
+def output(): # serve the demo script
+    return render_template('demo.html')
 
 @app.route("/pyapps/util/cthresh", methods=['POST'])
 def calculate_coh():

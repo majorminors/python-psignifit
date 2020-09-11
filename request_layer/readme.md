@@ -36,7 +36,7 @@ To demo the default behaviour, run
 
 in a terminal.
 
-By default, the `request_layer.py` script launches a Flask server on `localhost:5000`. It is waiting for POST input at the routes defined in `request_layer.py`. It is configured to support CORS on all routes and default configuration can be found [here](https://flask-cors.corydolphin.com/en/latest/api.html#extension). 
+By default, the `request_layer.py` script launches a Flask server on `localhost:5000`. It is waiting for POST input at the routes defined in `request_layer.py`. It is configured to support CORS on all routes and default configuration can be found [here](https://flask-cors.corydolphin.com/en/latest/api.html#extension). It also requires authentication via basic access authentication. 
 
 ### Production
 For a production run, we want to wrap things in a WGSI server. We'll use gunicorn.

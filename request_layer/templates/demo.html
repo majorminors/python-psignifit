@@ -26,7 +26,11 @@
 			axios({
 				url: '/pyapps/util/cthresh',
 				method: 'post',
-				data: payload
+                                data: payload,
+                                auth: {
+                                    username: 'test',
+                                    password: 'tes3'
+                                }
 			})
 			.then(function (response) {
 				console.log("response:", response);
